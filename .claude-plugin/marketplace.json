@@ -1,0 +1,57 @@
+{
+  "name": "leads-sites",
+  "description": "Prospector Universal — Sistema de prospecção, redesign e publicação de sites para profissionais liberais",
+  "owner": {
+    "name": "BsttSntt0"
+  },
+  "plugins": [
+    {
+      "name": "prospect-maps",
+      "description": "Prospecção inteligente no Google Maps — encontra negócios bem avaliados (≥4.7★) com sites ruins, aplica filtros eliminatórios e qualifica leads automaticamente",
+      "source": {
+        "source": "git-subdir",
+        "url": "BsttSntt0/leads-sites",
+        "path": "plugins/prospect-maps",
+        "ref": "master",
+        "sha": "8511d5a7613f3bfe68caf0889b94145adf13ad44"
+      },
+      "homepage": "https://github.com/BsttSntt0/leads-sites"
+    },
+    {
+      "name": "redesign-premium",
+      "description": "Redesign premium de sites — cria versões modernas e de alta conversão mantendo logo, fotos e conteúdo originais do cliente, com copy melhorada e design mobile-first",
+      "source": {
+        "source": "git-subdir",
+        "url": "BsttSntt0/leads-sites",
+        "path": "plugins/redesign-premium",
+        "ref": "master",
+        "sha": "8511d5a7613f3bfe68caf0889b94145adf13ad44"
+      },
+      "homepage": "https://github.com/BsttSntt0/leads-sites"
+    },
+    {
+      "name": "deploy-modular",
+      "description": "Publicação automatizada de páginas em múltiplos provedores (Netlify, Vercel, HostGator, FTP, GitHub Pages, Cloudflare, Firebase, Railway, Render) com verificação de URL",
+      "source": {
+        "source": "git-subdir",
+        "url": "BsttSntt0/leads-sites",
+        "path": "plugins/deploy-modular",
+        "ref": "master",
+        "sha": "8511d5a7613f3bfe68caf0889b94145adf13ad44"
+      },
+      "homepage": "https://github.com/BsttSntt0/leads-sites"
+    },
+    {
+      "name": "email-proposal",
+      "description": "Redação e envio de propostas comerciais por e-mail — e-mail curto (120-180 palavras) com rapport, sem preço, com link da nova página já publicada",
+      "source": {
+        "source": "git-subdir",
+        "url": "BsttSntt0/leads-sites",
+        "path": "plugins/email-proposal",
+        "ref": "master",
+        "sha": "8511d5a7613f3bfe68caf0889b94145adf13ad44"
+      },
+      "homepage": "https://github.com/BsttSntt0/leads-sites"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "deploy-modular",
+  "description": "Publicação automatizada de páginas em múltiplos provedores de hospedagem com verificação de URL",
+  "version": "1.0.0",
+  "author": {
+    "name": "BsttSntt0"
+  }
+}
