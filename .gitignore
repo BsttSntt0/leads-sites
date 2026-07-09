@@ -1,0 +1,19 @@
+# Config (contém credenciais)
+config.json
+
+# Sites dos clientes (gerados automaticamente)
+sites/
+comparar.html
+leads.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor artifacts
+*.swp
+*.swo
+*~
+
+# Node (se usado)
+node_modules/

@@ -1,0 +1,37 @@
+# Leads — [Niche] in [City]
+## Search date: [Date]
+
+---
+
+## Qualified
+
+| # | Name | Rating | Reviews | Email | Phone | Website | Reason | Status |
+|---|------|--------|---------|-------|-------|---------|--------|--------|
+| 1 | Dr. Ana Nutri | 4.9 | 87 | ana@example.com | 11 99999-9999 | ananutri.com.br | Not responsive + no visible CTA | new |
+| 2 | Dr. John Psychologist | 4.8 | 112 | john@example.com | 11 98888-8888 | johnpsychologist.com.br | Outdated design + abandoned content | new |
+| 3 | Wellness Clinic | 4.7 | 55 | contact@example.com | 11 97777-7777 | wellnessclinic.com.br | Generic template + slow | new |
+| 4 | Dr. Mary Dentist | 4.9 | 203 | mary@example.com | 11 96666-6666 | marydentist.com.br | No hierarchy + no CTA | new |
+
+---
+
+## Discarded
+
+| # | Name | Rating | Reviews | Discard reason |
+|---|------|--------|---------|----------------|
+| 1 | Clinic X | 4.8 | 120 | Website is already good |
+| 2 | Dr. Carlos | 4.7 | 55 | No own website (Instagram only) |
+| 3 | Health Space | 4.9 | 89 | No public email found |
+| 4 | Dr. Paula | 4.7 | 42 | No own website (Linktree) |
+
+---
+
+### Status Legend
+
+| Status | Meaning |
+|--------|---------|
+| `new` | Prospected, waiting for redesign |
+| `redesigned` | Page created, waiting for publication |
+| `published` | Live, waiting for proposal |
+| `proposal sent` | Email sent, waiting for response |
+| `closed` | Client hired 🎉 |
+| `archived` | Not interested |
