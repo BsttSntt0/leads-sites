@@ -1,0 +1,45 @@
+{
+  "_comment": "Prospector Universal — Configuration File",
+  "_comment2": "Copy this file as config.json and fill in your data",
+
+  "assinatura": {
+    "nome": "Your Full Name",
+    "apresentacao": "High-conversion page designer",
+    "whatsapp": "5511999999999"
+  },
+
+  "prospeccao": {
+    "nichos": [
+      "nutritionists",
+      "psychologists",
+      "lawyers",
+      "psychiatrists",
+      "dentists",
+      "physiotherapists"
+    ],
+    "cidade": "São Paulo",
+    "leadsPorBusca": 10,
+    "notaMinima": 4.7,
+    "avaliacoesMinimas": 40
+  },
+
+  "envio": {
+    "modo": "draft",
+    "_comment_modo": "Options: 'draft' (review before sending) or 'direct' (send without review)"
+  },
+
+  "hospedagem": {
+    "provedor": "netlify",
+    "_comment_provedor": "Options: netlify, vercel, hostgator, github-pages, cloudflare-pages, railway, firebase-hosting, render, ftp, custom",
+    "pastaBase": "clients",
+    "credenciais": {
+      "_comment": "Fill according to your chosen provider. See the hosting/ folder for details."
+    }
+  },
+
+  "preferencias": {
+    "idioma": "en",
+    "formatoData": "MM/DD/YYYY",
+    "moeda": "USD"
+  }
+}

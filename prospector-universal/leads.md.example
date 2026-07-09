@@ -1,0 +1,37 @@
+# Leads — [Nicho] em [Cidade]
+## Busca em: [Data]
+
+---
+
+## Qualificados
+
+| # | Nome | Nota | Avaliações | E-mail | Telefone | Site | Motivo | Status |
+|---|------|------|------------|--------|----------|------|--------|--------|
+| 1 | Dra. Ana Nutri | 4.9 | 87 | ana@exemplo.com | 11 99999-9999 | ananutri.com.br | Não responsivo + sem CTA visível | novo |
+| 2 | Dr. João Psicólogo | 4.8 | 112 | joao@exemplo.com | 11 98888-8888 | joaopsicologo.com.br | Design datado + conteúdo abandonado | novo |
+| 3 | Clínica Bem-Estar | 4.7 | 55 | contato@exemplo.com | 11 97777-7777 | clinicabemestar.com.br | Template genérico + lento | novo |
+| 4 | Dra. Maria Dentista | 4.9 | 203 | maria@exemplo.com | 11 96666-6666 | mariadentista.com.br | Sem hierarquia + sem CTA | novo |
+
+---
+
+## Descartados
+
+| # | Nome | Nota | Avaliações | Motivo do descarte |
+|---|------|------|------------|---------------------|
+| 1 | Clínica X | 4.8 | 120 | Site já é bom |
+| 2 | Dr. Carlos | 4.7 | 55 | Sem site próprio (só Instagram) |
+| 3 | Espaço Saúde | 4.9 | 89 | Sem e-mail público |
+| 4 | Dra. Paula | 4.7 | 42 | Sem site próprio (Linktree) |
+
+---
+
+### Legenda de Status
+
+| Status | Significado |
+|--------|-------------|
+| `novo` | Prospectado, aguardando redesign |
+| `redesenhado` | Página criada, aguardando publicação |
+| `publicado` | No ar, aguardando proposta |
+| `proposta enviada` | E-mail enviado, aguardando resposta |
+| `fechado` | Cliente contratou 🎉 |
+| `arquivado` | Sem interesse |

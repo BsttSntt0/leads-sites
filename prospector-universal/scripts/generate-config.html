@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline' 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+<meta name="description" content="Gerador interativo de config.json para o Prospector Universal — formulário bilingue (PT/EN) para configuração de prospecção de clientes.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Prospector Universal — Gerar config.json">
+<meta property="og:description" content="Formulário interativo para gerar config.json do Prospector Universal. Preencha seus dados e baixe o arquivo.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+<title data-pt="⚙️ Prospector Universal — Gerar config.json" data-en="⚙️ Prospector Universal — Generate config.json">⚙️ Prospector Universal — Gerar config.json</title>
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --ink: #1a202c;
+    --muted: #718096;
+    --border: #e2e8f0;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --green: #22c55e;
+    --radius: 12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,'Segoe UI',Roboto,sans-serif;padding:24px;min-height:100vh}
+  .container{max-width:800px;margin:0 auto}
+  h1{font-size:26px;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:24px}
+  .lang-toggle{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:8px;overflow:hidden;width:fit-content}
+  .lang-toggle button{padding:8px 20px;border:none;cursor:pointer;font-weight:600;font-size:14px;background:var(--card);color:var(--muted);transition:all 0.2s}
+  .lang-toggle button.active{background:var(--primary);color:#fff}
+  .lang-toggle button:not(.active):hover{background:#f7fafc}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px}
+  .card h2{font-size:16px;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--primary)}
+  .card h2 .badge{font-size:11px;background:#e2e8f0;color:var(--muted);padding:2px 8px;border-radius:4px;font-weight:400}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+  .field{display:flex;flex-direction:column;gap:4px}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:13px;font-weight:600;color:var(--ink)}
+  .field .hint{font-size:11px;color:var(--muted)}
+  .field input,.field select,.field textarea{padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:#fff;transition:border 0.2s}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,0.15)}
+  .field textarea{resize:vertical;min-height:60px}
+  .field .err{font-size:12px;color:#dc2626;min-height:18px;display:flex;align-items:center;gap:4px;opacity:0;transition:opacity 0.2s}
+  .field .err.show{opacity:1}
+  .field .err.hidden{opacity:0}
+  .field input.error,.field select.error{border-color:#dc2626;background:#fef2f2}
+  .field input.error:focus,.field select.error:focus{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,0.15)}
+  .field input.valid,.field select.valid{border-color:var(--green)}
+  .validation-summary{display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13px}
+  .validation-summary.show{display:block}
+  .validation-summary h3{color:#dc2626;font-size:14px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .validation-summary ul{margin:0;padding-left:20px;color:#991b1b;line-height:1.6}
+  .validation-summary.ok{background:#f0fdf4;border-color:#bbf7d0}
+  .validation-summary.ok h3{color:var(--green)}
+  .check-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .check-group label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:400;cursor:pointer;padding:6px 10px;border:1px solid var(--border);border-radius:6px;transition:all 0.15s}
+  .check-group label:hover{border-color:var(--primary);background:#f7fafc}
+  .check-group label.checked{border-color:var(--primary);background:#eff6ff;font-weight:600}
+  .check-group input[type="checkbox"]{accent-color:var(--primary)}
+  .creds-area{background:#f7fafc;border:1px dashed var(--border);border-radius:8px;padding:16px;margin-top:12px;display:none}
+  .creds-area.show{display:block}
+  .creds-area h3{font-size:13px;margin-bottom:10px;color:var(--muted)}
+  .preview-area{background:#1a202c;color:#e2e8f0;border-radius:8px;padding:16px;font-family:'SF Mono','Fira Code',monospace;font-size:13px;line-height:1.5;overflow-x:auto;white-space:pre;max-height:300px;overflow-y:auto;margin-bottom:12px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s}
+  .btn-primary{background:var(--primary);color:#fff}
+  .btn-primary:hover{background:var(--primary-hover);transform:translateY(-1px)}
+  .btn-primary:active{transform:translateY(0)}
+  .btn-success{background:var(--green);color:#fff}
+  .btn-success:hover{background:#16a34a;transform:translateY(-1px)}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .toast{position:fixed;bottom:24px;right:24px;background:#1a202c;color:#fff;padding:14px 20px;border-radius:8px;font-size:14px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.2);opacity:0;transform:translateY(20px);transition:all 0.3s;z-index:999}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .providers-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:500px){.providers-list{grid-template-columns:1fr}}
+  .providers-list label{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.15s;font-size:14px;font-weight:500}
+  .providers-list label:hover{border-color:var(--primary)}
+  .providers-list input[type="radio"]{accent-color:var(--primary)}
+  .providers-list label.selected{border-color:var(--primary);background:#eff6ff}
+  .nichos-custom{display:flex;gap:8px;margin-top:8px}
+  .nichos-custom input{flex:1}
+  .nichos-custom button{padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;font-weight:600;font-size:13px}
+  .nichos-custom button:hover{background:#f7fafc}
+  .tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#eff6ff;color:var(--primary);border-radius:6px;font-size:12px;font-weight:600}
+  .tag button{border:none;background:none;color:var(--primary);cursor:pointer;font-size:14px;padding:0 2px;line-height:1}
+  .tag button:hover{color:#dc2626}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;min-height:28px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⚙️ Prospector Universal</h1>
+  <p class="sub" data-pt="Preencha o formulário e gere seu config.json" data-en="Fill out the form and generate your config.json">Preencha o formulário e gere seu config.json</p>
+
+  <!-- Language Toggle -->
+  <div class="lang-toggle">
+    <button id="langPt" class="active" onclick="setLang('pt')">🇧🇷 PT</button>
+    <button id="langEn" onclick="setLang('en')">🇺🇸 EN</button>
+  </div>
+
+  <!-- Signature -->
+  <div class="card">
+    <h2 data-pt="✍️ Assinatura" data-en="✍️ Signature">✍️ Assinatura</h2>
+    <div class="form-grid">
+      <div class="field full">
+        <label for="nome" data-pt="Nome completo" data-en="Full name">Nome completo <span aria-hidden="true" style="color:#dc2626">*</span></label>
+        <input type="text" id="nome" value="" placeholder="Seu nome" autocomplete="name" aria-required="true" aria-describedby="err-nome" oninput="preview();validateField(this)">
+        <span class="err" id="err-nome" role="alert" aria-live="polite"></span>
+      </div>
+      <div class="field full">
+        <label for="apresentacao" data-pt="Apresentação profissional" data-en="Professional presentation">Apresentação profissional <span aria-hidden="true" style="color:#dc2626">*</span></label>
+        <input type="text" id="apresentacao" value="" placeholder="Ex.: Especialista em presença digital" aria-required="true" aria-describedby="err-apresentacao" oninput="preview();validateField(this)">
+        <span class="err" id="err-apresentacao" role="alert" aria-live="polite"></span>
+      </div>
+      <div class="field">
+        <label for="whatsapp">WhatsApp <span aria-hidden="true" style="color:#dc2626">*</span></label>
+        <input type="tel" id="whatsapp" value="" placeholder="5511999999999" autocomplete="tel" inputmode="numeric" aria-required="true" aria-describedby="err-whatsapp" oninput="preview();validateField(this)">
+        <span class="err" id="err-whatsapp" role="alert" aria-live="polite"></span>
+        <span class="hint" data-pt="Apenas números, com código do país. Ex.: 5511999999999" data-en="Numbers only, with country code. E.g.: 5511999999999">Apenas números, com código do país. Ex.: 5511999999999</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prospecting -->
+  <div class="card">
+    <h2 data-pt="🔍 Prospecção" data-en="🔍 Prospecting">🔍 Prospecção <span class="badge" data-pt="opcional" data-en="optional">opcional</span></h2>
+    <div class="form-grid">
+      <div class="field full">
+        <label data-pt="Nichos (selecione ao menos 1)" data-en="Niches (select at least 1)">Nichos <span style="color:#dc2626">*</span></label>
+        <div class="check-group" id="nichosCheckGroup">
+          <label data-key="nutricionistas"><input type="checkbox" checked onchange="toggleNicho(this)"> Nutricionistas</label>
+          <label data-key="psicólogos"><input type="checkbox" checked onchange="toggleNicho(this)"> Psicólogos</label>
+          <label data-key="advogados"><input type="checkbox" onchange="toggleNicho(this)"> Advogados</label>
+          <label data-key="psiquiatras"><input type="checkbox" onchange="toggleNicho(this)"> Psiquiatras</label>
+          <label data-key="dentistas"><input type="checkbox" onchange="toggleNicho(this)"> Dentistas</label>
+          <label data-key="fisioterapeutas"><input type="checkbox" onchange="toggleNicho(this)"> Fisioterapeutas</label>
+          <label data-key="personal-trainers"><input type="checkbox" onchange="toggleNicho(this)"> Personal Trainers</label>
+        </div>
+        <div class="nichos-custom">
+          <input type="text" id="nichoCustomInput" placeholder="+ adicionar nicho..." data-en-placeholder="+ add niche...">
+          <button onclick="addNicho()">+</button>
+        </div>
+        <div class="tags" id="nichosTags"></div>
+        <span class="err" id="err-nichos"></span>
+      </div>
+      <div class="field">
+        <label data-pt="Cidade padrão" data-en="Default city">Cidade padrão <span style="color:#dc2626">*</span></label>
+        <input type="text" id="cidade" value="" placeholder="São Paulo" oninput="preview();validateField(this)">
+        <span class="err" id="err-cidade"></span>
+      </div>
+      <div class="field">
+        <label data-pt="Leads por busca" data-en="Leads per search">Leads por busca</label>
+        <input type="number" id="leadsPorBusca" value="10" min="1" max="50" oninput="preview()">
+      </div>
+      <div class="field">
+        <label>Nota mínima</label>
+        <input type="number" id="notaMinima" value="4.7" min="3" max="5" step="0.1" oninput="preview()">
+      </div>
+      <div class="field">
+        <label data-pt="Avaliações mínimas" data-en="Minimum reviews">Avaliações mínimas</label>
+        <input type="number" id="avaliacoesMinimas" value="40" min="0" step="5" oninput="preview()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Hosting -->
+  <div class="card">
+    <h2 data-pt="🏗️ Hospedagem" data-en="🏗️ Hosting">🏗️ Hospedagem</h2>
+    <div class="providers-list" id="providersList"></div>
+
+    <div class="field" style="margin-top:12px">
+      <label data-pt="Pasta base no servidor" data-en="Base folder on server">Pasta base <span style="color:#dc2626">*</span></label>
+      <input type="text" id="pastaBase" value="clientes" oninput="preview();validateField(this)">
+      <span class="err" id="err-pastaBase"></span>
+      <span class="hint" data-pt="As páginas ficarão em /[pasta]/[slug]/" data-en="Pages will be at /[folder]/[slug]/">As páginas ficarão em /[pasta]/[slug]/</span>
+    </div>
+
+    <!-- Dynamic credentials -->
+    <div class="creds-area" id="credsArea">
+      <h3 data-pt="🔑 Credenciais" data-en="🔑 Credentials">🔑 Credenciais</h3>
+      <div class="form-grid" id="credsFields"></div>
+    </div>
+  </div>
+
+  <!-- Email -->
+  <div class="card">
+    <h2 data-pt="📧 Envio de Proposta" data-en="📧 Proposal Sending">📧 Envio de Proposta</h2>
+    <div class="field">
+      <label data-pt="Modo de envio" data-en="Sending mode">Modo de envio</label>
+      <select id="modoEnvio" onchange="preview()">
+        <option value="draft" data-pt="Rascunho (revisar antes de enviar)" data-en="Draft (review before sending)">Rascunho (revisar antes de enviar)</option>
+        <option value="direct" data-pt="Direto (enviar sem revisão)" data-en="Direct (send without review)">Direto (enviar sem revisão)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Preferences -->
+  <div class="card">
+    <h2 data-pt="🌐 Preferências" data-en="🌐 Preferences">🌐 Preferências</h2>
+    <div class="form-grid">
+      <div class="field">
+        <label data-pt="Idioma" data-en="Language">Idioma</label>
+        <select id="idiomaPref" onchange="preview()">
+          <option value="pt-BR">Português (pt-BR)</option>
+          <option value="en">English (en)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-pt="Formato de data" data-en="Date format">Formato de data</label>
+        <select id="formatoData" onchange="preview()">
+          <option value="DD/MM/AAAA">DD/MM/AAAA</option>
+          <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+          <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-pt="Moeda" data-en="Currency">Moeda</label>
+        <select id="moeda" onchange="preview()">
+          <option value="BRL">BRL (R$)</option>
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview & Download -->
+  <div class="card">
+    <h2 data-pt="📋 Preview do config.json" data-en="📋 config.json Preview">📋 Preview</h2>
+    <div class="validation-summary" id="validationSummary">
+      <h3>❌ <span data-pt="Corrija os erros abaixo" data-en="Fix the errors below">Corrija os erros abaixo</span></h3>
+      <ul id="validationErrors"></ul>
+    </div>
+    <div class="preview-area" id="previewArea"></div>
+    <div class="btn-row">
+      <button class="btn btn-success" onclick="downloadConfig()">📥 <span data-pt="Baixar config.json" data-en="Download config.json">Baixar config.json</span></button>
+      <button class="btn btn-primary" onclick="copyConfig()">📋 <span data-pt="Copiar para área de transferência" data-en="Copy to clipboard">Copiar</span></button>
+    </div>
+    <p style="margin-top:12px;font-size:12px;color:#dc2626;display:flex;align-items:center;gap:6px">
+      ⚠️ <span data-pt="Este arquivo conterá suas credenciais em texto. Mantenha-o seguro e nunca o compartilhe." data-en="This file will contain your credentials in plain text. Keep it safe and never share it.">
+      Este arquivo conterá suas credenciais em texto. Mantenha-o seguro e nunca o compartilhe.</span>
+    </p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+const PROVIDERS = [
+  {value:'netlify',labelPt:'Netlify',labelEn:'Netlify',free:true,creds:[{key:'token',labelPt:'API Token (opcional)',labelEn:'API Token (optional)'}]},
+  {value:'vercel',labelPt:'Vercel',labelEn:'Vercel',free:true,creds:[{key:'token',labelPt:'Vercel Token (opcional)',labelEn:'Vercel Token (optional)'}]},
+  {value:'cloudflare-pages',labelPt:'Cloudflare Pages',labelEn:'Cloudflare Pages',free:true,creds:[{key:'token',labelPt:'API Token',labelEn:'API Token'},{key:'accountId',labelPt:'Account ID',labelEn:'Account ID'}]},
+  {value:'railway',labelPt:'Railway',labelEn:'Railway',free:true,creds:[{key:'token',labelPt:'Railway Token (opcional)',labelEn:'Railway Token (optional)'}]},
+  {value:'firebase-hosting',labelPt:'Firebase Hosting',labelEn:'Firebase Hosting',free:true,creds:[{key:'projectId',labelPt:'Project ID',labelEn:'Project ID'}]},
+  {value:'render',labelPt:'Render',labelEn:'Render',free:true,creds:[{key:'apiKey',labelPt:'API Key (opcional)',labelEn:'API Key (optional)'}]},
+  {value:'github-pages',labelPt:'GitHub Pages',labelEn:'GitHub Pages',free:true,creds:[{key:'usuario',labelPt:'Usuário do GitHub',labelEn:'GitHub username'},{key:'repo',labelPt:'Nome do repositório',labelEn:'Repository name'}]},
+  {value:'hostgator',labelPt:'HostGator',labelEn:'HostGator',free:false,creds:[{key:'usuario',labelPt:'Usuário do cPanel',labelEn:'cPanel username'},{key:'dominio',labelPt:'Domínio principal',labelEn:'Main domain'},{key:'servidor',labelPt:'Servidor',labelEn:'Server'}]},
+  {value:'ftp',labelPt:'FTP Genérico',labelEn:'Generic FTP',free:false,creds:[{key:'servidor',labelPt:'Servidor FTP',labelEn:'FTP server'},{key:'usuario',labelPt:'Usuário',labelEn:'Username'},{key:'porta',labelPt:'Porta (21)',labelEn:'Port (21)'}]},
+  {value:'custom',labelPt:'Customizado',labelEn:'Custom',free:null,creds:[{key:'urlBase',labelPt:'URL base',labelEn:'Base URL'}]}
+];
+
+let lang = 'pt';
+let selectedProvider = 'netlify';
+let customNichos = [];
+let hasAttemptedSubmit = false;
+
+// ===== INIT =====
+function init() {
+  renderProviders();
+  renderCreds();
+  initNichos();
+  preview();
+}
+
+function renderProviders() {
+  const container = document.getElementById('providersList');
+  container.innerHTML = '';
+  PROVIDERS.forEach(p => {
+    const label = document.createElement('label');
+    label.className = p.value === selectedProvider ? 'selected' : '';
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'provedor';
+    input.value = p.value;
+    if (p.value === selectedProvider) input.checked = true;
+    input.onchange = () => selectProvider(p.value);
+    const freeBadge = p.free === true ? ' ✅' : p.free === false ? ' 💰' : ' 🔧';
+    const n = lang === 'pt' ? p.labelPt : p.labelEn;
+    label.appendChild(input);
+    label.append(n + freeBadge);
+    container.appendChild(label);
+  });
+}
+
+function selectProvider(val) {
+  selectedProvider = val;
+  document.querySelectorAll('#providersList label').forEach(l => l.classList.remove('selected'));
+  document.querySelector(`#providersList input[value="${val}"]`).closest('label').classList.add('selected');
+  renderCreds();
+  preview();
+}
+
+function renderCreds() {
+  const prov = PROVIDERS.find(p => p.value === selectedProvider);
+  const area = document.getElementById('credsArea');
+  const fields = document.getElementById('credsFields');
+  if (!prov || prov.creds.length === 0) { area.classList.remove('show'); return; }
+  area.classList.add('show');
+  fields.innerHTML = '';
+  prov.creds.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'field';
+    const lbl = document.createElement('label');
+    lbl.textContent = lang === 'pt' ? c.labelPt : c.labelEn;
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.id = 'cred_' + c.key;
+    inp.placeholder = lang === 'pt' ? c.labelPt : c.labelEn;
+    inp.oninput = preview;
+    div.appendChild(lbl);
+    div.appendChild(inp);
+    fields.appendChild(div);
+  });
+}
+
+// ===== NICHOS =====
+function initNichos() {
+  document.querySelectorAll('#nichosCheckGroup input').forEach(cb => {
+    const lbl = cb.closest('label');
+    if (cb.checked) lbl.classList.add('checked');
+  });
+  updateNichoDisplay();
+  preview();
+}
+
+function toggleNicho(cb) {
+  const lbl = cb.closest('label');
+  lbl.classList.toggle('checked', cb.checked);
+  updateNichoDisplay();
+  preview();
+}
+
+function addNicho() {
+  const inp = document.getElementById('nichoCustomInput');
+  const val = inp.value.trim().toLowerCase();
+  if (!val) return;
+  // Check if already exists in checkbox group
+  let exists = false;
+  document.querySelectorAll('#nichosCheckGroup label').forEach(l => {
+    if (l.getAttribute('data-key') === val) {
+      const cb = l.querySelector('input');
+      if (!cb.checked) { cb.checked = true; l.classList.add('checked'); }
+      exists = true;
+    }
+  });
+  if (!exists && !customNichos.includes(val)) {
+    customNichos.push(val);
+  }
+  inp.value = '';
+  updateNichoDisplay();
+  preview();
+}
+
+function removeCustomNicho(val) {
+  customNichos = customNichos.filter(n => n !== val);
+  updateNichoDisplay();
+  preview();
+}
+
+function updateNichoDisplay() {
+  const tags = document.getElementById('nichosTags');
+  tags.innerHTML = '';
+  // From checkboxes
+  document.querySelectorAll('#nichosCheckGroup label.checked').forEach(l => {
+    const val = l.getAttribute('data-key') || l.textContent.trim().toLowerCase();
+    const span = document.createElement('span');
+    span.className = 'tag';
+    span.textContent = val;
+    tags.appendChild(span);
+  });
+  // Custom (sanitized: no innerHTML with user input)
+  customNichos.forEach(n => {
+    const span = document.createElement('span');
+    span.className = 'tag';
+    span.textContent = n;
+    const btn = document.createElement('button');
+    btn.textContent = '×';
+    btn.setAttribute('aria-label', 'Remover ' + n);
+    btn.onclick = function() { removeCustomNicho(n); };
+    span.appendChild(btn);
+    tags.appendChild(span);
+  });
+}
+
+function getNichos() {
+  const arr = [];
+  document.querySelectorAll('#nichosCheckGroup label.checked').forEach(l => {
+    arr.push(l.getAttribute('data-key') || l.textContent.trim().toLowerCase());
+  });
+  customNichos.forEach(n => arr.push(n));
+  return arr;
+}
+
+// ===== VALIDATION =====
+const VALIDATION_RULES = {
+  nome: {
+    required: true,
+    minLength: 2,
+    test: v => v.length >= 2,
+    errPt: 'Digite seu nome completo (mín. 2 caracteres)',
+    errEn: 'Enter your full name (min. 2 characters)'
+  },
+  apresentacao: {
+    required: true,
+    minLength: 5,
+    test: v => v.length >= 5,
+    errPt: 'Digite sua apresentação profissional (mín. 5 caracteres)',
+    errEn: 'Enter your professional presentation (min. 5 characters)'
+  },
+  whatsapp: {
+    required: true,
+    test: v => /^[0-9]{10,15}$/.test(v.replace(/[^0-9]/g,'')),
+    errPt: 'WhatsApp deve conter apenas números (10-15 dígitos, com código do país)',
+    errEn: 'WhatsApp must contain only numbers (10-15 digits, with country code)'
+  },
+  cidade: {
+    required: true,
+    minLength: 3,
+    test: v => v.length >= 3,
+    errPt: 'Digite a cidade padrão para prospecção',
+    errEn: 'Enter the default city for prospecting'
+  },
+  pastaBase: {
+    required: true,
+    test: v => /^[a-z0-9-_]+$/i.test(v) && v.length > 0,
+    errPt: 'A pasta base deve conter apenas letras, números, hífen ou sublinhado',
+    errEn: 'Base folder must contain only letters, numbers, hyphens or underscores'
+  }
+};
+
+function validate() {
+  try {
+    const errors = [];
+    const showVisual = hasAttemptedSubmit;
+
+    // Reset all field styles
+    document.querySelectorAll('.field input.error, .field select.error').forEach(el => el.classList.remove('error'));
+    document.querySelectorAll('.field .err.show').forEach(el => el.classList.remove('show'));
+    document.querySelectorAll('.field input.valid').forEach(el => el.classList.remove('valid'));
+
+    // Validate simple fields
+    Object.keys(VALIDATION_RULES).forEach(key => {
+      const el = document.getElementById(key);
+      const rule = VALIDATION_RULES[key];
+      if (!el) return;
+      const val = el.value.trim();
+      const isValid = rule.test(val);
+      if (!isValid) {
+        if (showVisual) {
+          el.classList.add('error');
+          const errEl = document.getElementById('err-' + key);
+          if (errEl) { errEl.textContent = lang === 'pt' ? rule.errPt : rule.errEn; errEl.classList.add('show'); }
+        }
+        errors.push({ key, msg: lang === 'pt' ? rule.errPt : rule.errEn });
+      } else if (showVisual && val) {
+        el.classList.add('valid');
+      }
+    });
+
+    // Validate nichos
+    const nichos = getNichos();
+    if (nichos.length === 0) {
+      if (showVisual) {
+        const errEl = document.getElementById('err-nichos');
+        if (errEl) { errEl.textContent = lang === 'pt' ? 'Selecione ou adicione ao menos 1 nicho' : 'Select or add at least 1 niche'; errEl.classList.add('show'); }
+      }
+      errors.push({ key: 'nichos', msg: lang === 'pt' ? 'Selecione ou adicione ao menos 1 nicho' : 'Select or add at least 1 niche' });
+    }
+
+    // Validate credentials for paid providers
+    const prov = PROVIDERS.find(p => p.value === selectedProvider);
+    if (prov && prov.creds.length > 0 && (prov.free === false || selectedProvider === 'hostgator' || selectedProvider === 'ftp')) {
+      prov.creds.forEach(c => {
+        if (c.key === 'token' || c.key === 'apiKey' || c.key === 'porta') return;
+        const el = document.getElementById('cred_' + c.key);
+        if (el && !el.value.trim()) {
+          if (showVisual) el.classList.add('error');
+          const msg = lang === 'pt' ? 'Campo obrigatório' : 'Required field';
+          errors.push({ key: 'cred_' + c.key, msg });
+        }
+      });
+    }
+
+    // Update validation summary
+    const summary = document.getElementById('validationSummary');
+    const list = document.getElementById('validationErrors');
+    if (!summary || !list) return errors.length === 0;
+    list.innerHTML = '';
+
+    if (!showVisual) {
+      summary.classList.remove('show', 'ok');
+      return errors.length === 0;
+    }
+
+    summary.classList.add('show');
+    if (errors.length > 0) {
+      summary.classList.remove('ok');
+      const span = summary.querySelector('h3 span');
+      if (span) span.textContent = lang === 'pt' ? 'Corrija os erros abaixo' : 'Fix the errors below';
+      errors.forEach(e => {
+        const li = document.createElement('li');
+        li.textContent = e.msg;
+        list.appendChild(li);
+      });
+      return false;
+    } else {
+      summary.classList.add('ok');
+      const span = summary.querySelector('h3 span');
+      if (span) span.textContent = lang === 'pt' ? 'Todos os campos estão válidos!' : 'All fields are valid!';
+      return true;
+    }
+  } catch(e) {
+    console.error('validate() error:', e);
+    return false;
+  }
+}
+
+function validateField(el) {
+  if (!el || !hasAttemptedSubmit) return;
+  const key = el.id;
+  const rule = VALIDATION_RULES[key];
+  if (!rule) return;
+  const val = el.value.trim();
+  const errEl = document.getElementById('err-' + key);
+  if (!errEl) return;
+
+  if (!val) {
+    el.classList.remove('valid');
+    el.classList.add('error');
+    errEl.textContent = lang === 'pt' ? rule.errPt : rule.errEn;
+    errEl.classList.add('show');
+  } else if (!rule.test(val)) {
+    el.classList.remove('valid');
+    el.classList.add('error');
+    errEl.textContent = lang === 'pt' ? rule.errPt : rule.errEn;
+    errEl.classList.add('show');
+  } else {
+    el.classList.remove('error');
+    el.classList.add('valid');
+    errEl.classList.remove('show');
+  }
+}
+
+// ===== PREVIEW =====
+function preview() {
+  const config = buildConfig();
+  document.getElementById('previewArea').textContent = JSON.stringify(config, null, 2);
+  validate();
+}
+
+function buildConfig() {
+  const prov = PROVIDERS.find(p => p.value === selectedProvider);
+  const creds = {};
+  if (prov && prov.creds.length > 0) {
+    prov.creds.forEach(c => {
+      const val = document.getElementById('cred_' + c.key)?.value?.trim() || '';
+      if (val) creds[c.key] = val;
+    });
+  }
+  return {
+    assinatura: {
+      nome: document.getElementById('nome').value.trim(),
+      apresentacao: document.getElementById('apresentacao').value.trim(),
+      whatsapp: document.getElementById('whatsapp').value.trim()
+    },
+    prospeccao: {
+      nichos: getNichos(),
+      cidade: document.getElementById('cidade').value.trim(),
+      leadsPorBusca: parseInt(document.getElementById('leadsPorBusca').value) || 10,
+      notaMinima: parseFloat(document.getElementById('notaMinima').value) || 4.7,
+      avaliacoesMinimas: parseInt(document.getElementById('avaliacoesMinimas').value) || 40
+    },
+    envio: {
+      modo: document.getElementById('modoEnvio').value
+    },
+    hospedagem: {
+      provedor: selectedProvider,
+      pastaBase: document.getElementById('pastaBase').value.trim() || 'clientes',
+      credenciais: creds
+    },
+    preferencias: {
+      idioma: document.getElementById('idiomaPref').value,
+      formatoData: document.getElementById('formatoData').value,
+      moeda: document.getElementById('moeda').value
+    }
+  };
+}
+
+// ===== DOWNLOAD =====
+function downloadConfig() {
+  hasAttemptedSubmit = true;
+  if (!validate()) {
+    showToast(lang === 'pt' ? '❌ Corrija os erros antes de baixar' : '❌ Fix errors before downloading');
+    return;
+  }
+  const config = buildConfig();
+  const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'config.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast(lang === 'pt' ? '✅ config.json baixado com sucesso!' : '✅ config.json downloaded successfully!');
+}
+
+function copyConfig() {
+  hasAttemptedSubmit = true;
+  if (!validate()) {
+    showToast(lang === 'pt' ? '❌ Corrija os erros antes de copiar' : '❌ Fix errors before copying');
+    return;
+  }
+  const config = buildConfig();
+  navigator.clipboard.writeText(JSON.stringify(config, null, 2)).then(() => {
+    showToast(lang === 'pt' ? '✅ Copiado para área de transferência!' : '✅ Copied to clipboard!');
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ===== LANGUAGE =====
+function setLang(l) {
+  lang = l;
+  document.getElementById('langPt').classList.toggle('active', l === 'pt');
+  document.getElementById('langEn').classList.toggle('active', l === 'en');
+  // Sync preference select with language toggle
+  document.getElementById('idiomaPref').value = l === 'en' ? 'en' : 'pt-BR';
+
+  // Toggle data-pt / data-en attributes
+  document.querySelectorAll('[data-pt],[data-en]').forEach(el => {
+    if (el.tagName === 'OPTION') {
+      const val = el.getAttribute('data-' + l);
+      if (val) el.textContent = val;
+    } else {
+      const val = el.getAttribute('data-' + l);
+      if (val) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = val;
+        } else {
+          el.textContent = val;
+        }
+      }
+    }
+  });
+
+  // Update niche labels
+  document.querySelectorAll('#nichosCheckGroup label[data-key]').forEach(l => {
+    const key = l.getAttribute('data-key');
+    const names = {
+      'nutricionistas': {pt:'Nutricionistas',en:'Nutritionists'},
+      'psicólogos': {pt:'Psicólogos',en:'Psychologists'},
+      'advogados': {pt:'Advogados',en:'Lawyers'},
+      'psiquiatras': {pt:'Psiquiatras',en:'Psychiatrists'},
+      'dentistas': {pt:'Dentistas',en:'Dentists'},
+      'fisioterapeutas': {pt:'Fisioterapeutas',en:'Physiotherapists'},
+      'personal-trainers': {pt:'Personal Trainers',en:'Personal Trainers'}
+    };
+    const txt = names[key] ? names[key][l] : key;
+    const cb = l.querySelector('input');
+    // Keep the checkbox, update text
+    l.childNodes.forEach(n => { if (n.nodeType === 3) n.remove(); });
+    l.appendChild(document.createTextNode(' ' + txt));
+  });
+
+  // Custom input placeholder
+  document.getElementById('nichoCustomInput').placeholder = l === 'en' ? '+ add niche...' : '+ adicionar nicho...';
+
+  // Re-render providers with new language
+  document.querySelectorAll('#providersList label').forEach((label, i) => {
+    const p = PROVIDERS[i];
+    if (!p) return;
+    const input = label.querySelector('input');
+    const freeBadge = p.free === true ? ' ✅' : p.free === false ? ' 💰' : ' 🔧';
+    label.childNodes.forEach(n => { if (n.nodeType === 3) n.remove(); });
+    if (input) label.insertBefore(input, label.firstChild);
+    label.append((lang === 'pt' ? p.labelPt : p.labelEn) + freeBadge);
+  });
+
+  renderCreds();
+  preview();
+}
+
+// ===== START =====
+init();
+</script>
+</body>
+</html>
